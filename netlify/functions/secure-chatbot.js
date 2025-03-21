@@ -38,7 +38,7 @@ exports.handler = async function(event, context) {
                 "Authorization": `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-4",
+                model: "gpt-3.5-turbo",
                 messages: [
                     { role: "system", content: "Sei un coach esperto, empatico, motivazionale e tecnico. Rispondi come Rick, fondatore di Second Life Project, con risposte pratiche e mirate." },
                     { role: "user", content: requestBody.message }
