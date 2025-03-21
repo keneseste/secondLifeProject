@@ -1,4 +1,12 @@
 exports.handler = async function(event) {
+    return {
+        statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "*",  // Permette richieste da tutti i domini
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Methods": "POST, OPTIONS"
+        },
+    };
     if (event.httpMethod !== "POST") {
         return {
             statusCode: 405,
