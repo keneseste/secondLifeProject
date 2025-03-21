@@ -5,7 +5,7 @@
 const chatbotConfig = {
     apiEndpoint: 'https://api.openai.com/v1/chat/completions',
     model: 'gpt-4', // Utilizzare gpt-4 se disponibile nell'abbonamento Plus
-    apiKey: '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', // Inserisci qui la tua API key di OpenAI
+    apiKey: '', // Inserisci qui la tua API key di OpenAI
     systemPrompt: `Sei un assistente virtuale per SecondLife Project, un programma di coaching online che ottimizza l'allenamento in palestra.
     Rispondi in modo conciso e amichevole alle domande sul programma. Ecco alcune informazioni sul progetto:
     - SecondLife Project offre allenamenti brevi (1 ora), intensi e mirati per chi ha una vita impegnata
