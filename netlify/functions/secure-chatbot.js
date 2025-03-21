@@ -6,7 +6,7 @@ exports.handler = async function(event) {
         };
     }
 
-    const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // La chiave è nascosta nelle variabili di ambiente
+const apiUrl = "https://secondlifeproject.netlify.app/.netlify/functions/secure-chatbot";
     
     if (!OPENAI_API_KEY) {
         return {
@@ -17,21 +17,12 @@ exports.handler = async function(event) {
 
     try {
         const requestBody = JSON.parse(event.body);
-        
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${OPENAI_API_KEY}`
-            },
-            body: JSON.stringify({
-                model: "gpt-4",
-                messages: [
-                    { role: "system", content: "Sei un coach esperto, empatico, motivazionale e tecnico. Rispondi come Rick, fondatore di Second Life Project, con risposte pratiche e mirate." },
-                    { role: "user", content: requestBody.message }
-                ]
-            })
-        });
+
+        const response = await fetch(apiUrl, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: userMessage })
+});
 
         const data = await response.json();
         return {
