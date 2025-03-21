@@ -1,31 +1,36 @@
-exports.handler = async function(event) {
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",  // Permette richieste da tutti i domini
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Allow-Methods": "POST, OPTIONS"
-        },
-    };
-    if (event.httpMethod !== "POST") {
+exports.handler = async function(event, context) {
+    console.log("🟢 Funzione avviata!");
+    console.log("🟢 Evento ricevuto:", event);
+
+    if (event.httpMethod === "OPTIONS") {
         return {
-            statusCode: 405,
-            body: JSON.stringify({ error: "Metodo non consentito" })
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "POST, OPTIONS"
+            },
+            body: JSON.stringify({ message: "OK" })
         };
     }
 
-    const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // La chiave è nascosta nelle variabili di ambiente
-    
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
     if (!OPENAI_API_KEY) {
+        console.error("🔴 Errore: Chiave API non trovata!");
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({ error: "Chiave API non trovata" })
         };
     }
 
     try {
         const requestBody = JSON.parse(event.body);
-        
+        console.log("🟢 Richiesta ricevuta:", requestBody);
+
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
             headers: {
@@ -42,13 +47,24 @@ exports.handler = async function(event) {
         });
 
         const data = await response.json();
+        console.log("🟢 Risposta OpenAI:", data);
+
         return {
             statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({ reply: data.choices[0].message.content })
         };
     } catch (error) {
+        console.error("🔴 Errore interno:", error);
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({ error: "Errore interno del server" })
         };
     }
