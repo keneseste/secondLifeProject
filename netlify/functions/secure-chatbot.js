@@ -46,7 +46,36 @@ exports.handler = async function(event, context) {
             })
         });
 
-        const data = await response.json();
+        const responseText = await response.text(); // Leggiamo la risposta grezza
+        console.log("🟢 Risposta grezza OpenAI:", responseText);
+
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (error) {
+            console.error("🔴 Errore nel parsing JSON:", error);
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ error: "Risposta OpenAI non valida" })
+            };
+        }
+
+        if (!data || !data.choices || data.choices.length === 0) {
+            console.error("🔴 Errore: Risposta OpenAI vuota o non valida:", data);
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ error: "Risposta OpenAI vuota o non valida" })
+            };
+        }
+
         console.log("🟢 Risposta OpenAI:", data);
 
         return {
@@ -58,7 +87,7 @@ exports.handler = async function(event, context) {
             body: JSON.stringify({ reply: data.choices[0].message.content })
         };
     } catch (error) {
-        console.error("🔴 Errore interno:", error);
+        console.error("🔴 Errore interno:", error.message, error.stack);
         return {
             statusCode: 500,
             headers: {
