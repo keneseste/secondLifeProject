@@ -1,4 +1,4 @@
-// Script per la gestione del questionario e generazione PDF
+// Script per la gestione del questionario con apertura automatica del client email
 document.addEventListener('DOMContentLoaded', function() {
     // Riferimento al form
     const form = document.getElementById('questionario-form');
@@ -27,11 +27,25 @@ document.addEventListener('DOMContentLoaded', function() {
             formDataObj[key] = value;
         });
         
+        // Mostra messaggio di caricamento
+        showMessage('Generazione PDF in corso...', 'loading');
+        
         // Generazione del PDF
         generatePDF(formDataObj);
         
-        // Invio email con i dati del form
-        sendFormData(formDataObj);
+        // Crea un riepilogo dei dati per l'email
+        const emailBody = createEmailBody(formDataObj);
+        
+        // Apri il client email dell'utente con i dati precompilati
+        setTimeout(function() {
+            openEmailClient(formDataObj.nome, emailBody);
+            
+            // Mostra messaggio di successo
+            showMessage('PDF generato con successo! Si aprirà il tuo client email per inviare il questionario. Allega il PDF appena scaricato e invia l\'email.', 'success');
+            
+            // Resetta il form
+            form.reset();
+        }, 1500); // Piccolo ritardo per assicurarsi che il PDF sia stato scaricato
     });
     
     // Funzione di validazione del form
@@ -281,69 +295,30 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Salva il PDF con il nome dell'utente
         const fileName = 'SecondLife_Questionario_' + data.nome.replace(/\s+/g, '_') + '.pdf';
-        
-        // Scarica il PDF
         doc.save(fileName);
-        
-        // Restituisci il blob per l'invio email
-        return doc.output('blob');
     }
     
-    // Funzione per inviare i dati del form via email
-    function sendFormData(data) {
-        // Mostra messaggio di caricamento
-        showMessage('Invio in corso...', 'loading');
+    // Funzione per creare il corpo dell'email
+    function createEmailBody(data) {
+        let body = `Salve,\n\n`;
+        body += `Ho compilato il questionario iniziale di SecondLife Project.\n\n`;
+        body += `Dati principali:\n`;
+        body += `- Nome: ${data.nome}\n`;
+        body += `- Email: ${data.email}\n`;
+        body += `- Età: ${data.eta} anni\n`;
+        body += `- Obiettivo principale: ${data.obiettivo}\n`;
+        body += `- Livello di impegno: ${data.impegno}\n\n`;
+        body += `Ho allegato a questa email il PDF completo del questionario.\n\n`;
+        body += `Cordiali saluti,\n${data.nome}`;
         
-        // Crea un oggetto FormData per l'invio
-        const emailFormData = new FormData();
-        
-        // Aggiungi i dati del form
-        emailFormData.append('_subject', 'Nuovo questionario da SecondLife Project: ' + data.nome);
-        emailFormData.append('name', data.nome);
-        emailFormData.append('_replyto', data.email);
-        
-        // Crea un messaggio di riepilogo
-        let message = `Nuovo questionario compilato da ${data.nome}\n\n`;
-        message += `Email: ${data.email}\n`;
-        message += `Età: ${data.eta} anni\n`;
-        message += `Altezza: ${data.altezza} cm\n`;
-        message += `Peso: ${data.peso} kg\n\n`;
-        message += `Obiettivo principale: ${data.obiettivo}\n`;
-        message += `Livello di impegno: ${data.impegno}\n\n`;
-        message += `Il PDF è stato generato e scaricato localmente dall'utente.`;
-        
-        emailFormData.append('message', message);
-        
-        // Rimuovi temporaneamente l'allegato PDF per risolvere il problema di invio
-        // emailFormData.append('attachment', pdfBlob, 'SecondLife_Questionario_' + data.nome.replace(/\s+/g, '_') + '.pdf');
-        
-        // Invia i dati a Formspree
-        fetch('https://formspree.io/f/mqaplppn', {
-            method: 'POST',
-            body: emailFormData,
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Errore nell\'invio del form');
-        })
-        .then(data => {
-            // Mostra messaggio di successo
-            showMessage('Questionario inviato con successo! Il PDF è stato scaricato sul tuo dispositivo. Riceverai presto una risposta.', 'success');
-            
-            // Resetta il form
-            form.reset();
-        })
-        .catch(error => {
-            console.error('Errore:', error);
-            
-            // Mostra messaggio di errore ma conferma che il PDF è stato generato
-            showMessage('Si è verificato un problema con l\'invio del form, ma il PDF è stato generato e scaricato correttamente. Per completare l\'iscrizione, ti preghiamo di inviare il PDF a riccardo.casafino@gmail.com insieme alle tue foto.', 'warning');
-        });
+        return encodeURIComponent(body);
+    }
+    
+    // Funzione per aprire il client email dell'utente
+    function openEmailClient(nome, emailBody) {
+        const subject = encodeURIComponent(`Questionario SecondLife Project - ${nome}`);
+        const mailto = `mailto:riccardo.casafino@gmail.com?subject=${subject}&body=${emailBody}`;
+        window.location.href = mailto;
     }
     
     // Funzione per mostrare messaggi all'utente
