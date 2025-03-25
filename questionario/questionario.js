@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
         showMessage('Invio in corso...', 'loading');
         
         // Invia i dati a Formspree
-        fetch('https://formspree.io/f/xeoaewvp', {
+        fetch('https://formspree.io/f/mqaplppn', {
             method: 'POST',
             body: emailFormData,
             headers: {
