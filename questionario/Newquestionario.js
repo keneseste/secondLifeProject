@@ -1,4 +1,4 @@
-// Script per la gestione del questionario con invio dati testuali via Formspree
+// Script per la gestione del questionario con apertura automatica del client email
 document.addEventListener('DOMContentLoaded', function() {
     // Riferimento al form
     const form = document.getElementById('questionario-form');
@@ -28,90 +28,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Mostra messaggio di caricamento
-        showMessage('Elaborazione in corso...', 'loading');
+        showMessage('Generazione PDF in corso...', 'loading');
         
         // Generazione del PDF
         generatePDF(formDataObj);
         
-        // Crea un oggetto FormData per l'invio
-        const emailFormData = new FormData();
+        // Crea un riepilogo dei dati per l'email
+        const emailBody = createEmailBody(formDataObj);
         
-        // Aggiungi i dati del form
-        emailFormData.append('_subject', 'Nuovo questionario da SecondLife Project: ' + formDataObj.nome);
-        emailFormData.append('name', formDataObj.nome);
-        emailFormData.append('_replyto', formDataObj.email);
-        
-        // Crea un messaggio di riepilogo ben formattato
-        let message = `SECOND LIFE PROJECT - QUESTIONARIO INIZIALE\n\n`;
-        message += `DATI ANAGRAFICI\n`;
-        message += `Nome e Cognome: ${formDataObj.nome}\n`;
-        message += `Email: ${formDataObj.email}\n`;
-        message += `Età: ${formDataObj.eta} anni\n`;
-        message += `Altezza: ${formDataObj.altezza} cm\n`;
-        message += `Peso attuale: ${formDataObj.peso} kg\n\n`;
-        
-        message += `ESPERIENZA E ALLENAMENTO\n`;
-        message += `Esperienza: ${formDataObj.esperienza}\n`;
-        message += `Frequenza: ${formDataObj.frequenza} a settimana\n`;
-        message += `Durata sessioni: ${formDataObj.durata}\n\n`;
-        
-        message += `OBIETTIVI\n`;
-        message += `Obiettivo principale: ${formDataObj.obiettivo}\n`;
-        message += `Aspettative: ${formDataObj.aspettative}\n\n`;
-        
-        message += `STILE DI VITA\n`;
-        message += `Lavoro: ${formDataObj.lavoro}\n`;
-        message += `Ore di sonno: ${formDataObj.sonno}\n`;
-        message += `Livello di stress: ${formDataObj.stress}\n\n`;
-        
-        message += `ALIMENTAZIONE\n`;
-        message += `Vuoi essere seguito/a con macros e dieta flessibile? ${formDataObj.dieta}\n\n`;
-        
-        message += `ALLENAMENTO & PREFERENZE\n`;
-        message += `Luogo di allenamento: ${formDataObj.luogo}\n`;
-        message += `Limitazioni/Infortuni: ${formDataObj.infortuni || "Nessuno"}\n`;
-        message += `Altri sport: ${formDataObj.altri_sport || "Nessuno"}\n\n`;
-        
-        message += `LIVELLO DI IMPEGNO\n`;
-        message += `Impegno: ${formDataObj.impegno}\n`;
-        if (formDataObj.impegno === 'Moderato') {
-            message += `"Voglio migliorare, ma senza stravolgere la mia vita"\n\n`;
-        } else {
-            message += `"Sono pronto/a a fare il massimo per trasformarmi"\n\n`;
-        }
-        
-        message += `NOTA: Il PDF del questionario è stato generato e scaricato sul dispositivo dell'utente.\n`;
-        message += `Ti ricordiamo di inviare le foto (frontale, laterale e posteriore) a riccardo.casafino@gmail.com\n`;
-        
-        emailFormData.append('message', message);
-        
-        // Invia i dati a Formspree
-        fetch('https://formspree.io/f/mqaplppn', {
-            method: 'POST',
-            body: emailFormData,
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Errore nell\'invio del form');
-        })
-        .then(data => {
+        // Apri il client email dell'utente con i dati precompilati
+        setTimeout(function() {
+            openEmailClient(formDataObj.nome, emailBody);
+            
             // Mostra messaggio di successo
-            showMessage('Questionario inviato con successo! Il PDF è stato scaricato sul tuo dispositivo. Riceverai presto una risposta.', 'success');
+            showMessage('PDF generato con successo! Si aprirà il tuo client email per inviare il questionario. Allega il PDF appena scaricato e invia l\'email.', 'success');
             
             // Resetta il form
             form.reset();
-        })
-        .catch(error => {
-            console.error('Errore:', error);
-            
-            // Mostra messaggio di errore ma conferma che il PDF è stato generato
-            showMessage('Si è verificato un problema con l\'invio del form, ma il PDF è stato generato e scaricato correttamente. Per completare l\'iscrizione, ti preghiamo di inviare il PDF a riccardo.casafino@gmail.com insieme alle tue foto.', 'warning');
-        });
+        }, 1500); // Piccolo ritardo per assicurarsi che il PDF sia stato scaricato
     });
     
     // Funzione di validazione del form
@@ -362,6 +296,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Salva il PDF con il nome dell'utente
         const fileName = 'SecondLife_Questionario_' + data.nome.replace(/\s+/g, '_') + '.pdf';
         doc.save(fileName);
+    }
+    
+    // Funzione per creare il corpo dell'email
+    function createEmailBody(data) {
+        let body = `Salve,\n\n`;
+        body += `Ho compilato il questionario iniziale di SecondLife Project.\n\n`;
+        body += `Dati principali:\n`;
+        body += `- Nome: ${data.nome}\n`;
+        body += `- Email: ${data.email}\n`;
+        body += `- Età: ${data.eta} anni\n`;
+        body += `- Obiettivo principale: ${data.obiettivo}\n`;
+        body += `- Livello di impegno: ${data.impegno}\n\n`;
+        body += `Ho allegato a questa email il PDF completo del questionario.\n\n`;
+        body += `Cordiali saluti,\n${data.nome}`;
+        
+        return encodeURIComponent(body);
+    }
+    
+    // Funzione per aprire il client email dell'utente
+    function openEmailClient(nome, emailBody) {
+        const subject = encodeURIComponent(`Questionario SecondLife Project - ${nome}`);
+        const mailto = `mailto:riccardo.casafino@gmail.com?subject=${subject}&body=${emailBody}`;
+        window.location.href = mailto;
     }
     
     // Funzione per mostrare messaggi all'utente
