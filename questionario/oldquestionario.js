@@ -282,17 +282,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Salva il PDF con il nome dell'utente
         const fileName = 'SecondLife_Questionario_' + data.nome.replace(/\s+/g, '_') + '.pdf';
         
-        // Scarica il PDF
-        doc.save(fileName);
-        
-        // Restituisci il blob per l'invio email
-        return doc.output('blob');
+        // Salva il PDF e lo allega all'email
+        const pdfBlob = doc.output('blob');
+        return pdfBlob;
     }
     
     // Funzione per inviare i dati del form via email
     function sendFormData(data) {
-        // Mostra messaggio di caricamento
-        showMessage('Invio in corso...', 'loading');
+        // Genera il PDF
+        const pdfBlob = generatePDF(data);
         
         // Crea un oggetto FormData per l'invio
         const emailFormData = new FormData();
@@ -310,12 +308,15 @@ document.addEventListener('DOMContentLoaded', function() {
         message += `Peso: ${data.peso} kg\n\n`;
         message += `Obiettivo principale: ${data.obiettivo}\n`;
         message += `Livello di impegno: ${data.impegno}\n\n`;
-        message += `Il PDF è stato generato e scaricato localmente dall'utente.`;
+        message += `Il PDF completo è allegato a questa email.`;
         
         emailFormData.append('message', message);
         
-        // Rimuovi temporaneamente l'allegato PDF per risolvere il problema di invio
-        // emailFormData.append('attachment', pdfBlob, 'SecondLife_Questionario_' + data.nome.replace(/\s+/g, '_') + '.pdf');
+        // Aggiungi il PDF come allegato
+        emailFormData.append('attachment', pdfBlob, 'SecondLife_Questionario_' + data.nome.replace(/\s+/g, '_') + '.pdf');
+        
+        // Mostra messaggio di caricamento
+        showMessage('Invio in corso...', 'loading');
         
         // Invia i dati a Formspree
         fetch('https://formspree.io/f/mqaplppn', {
@@ -333,17 +334,52 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             // Mostra messaggio di successo
-            showMessage('Questionario inviato con successo! Il PDF è stato scaricato sul tuo dispositivo. Riceverai presto una risposta.', 'success');
+            showMessage('Questionario inviato con successo! Riceverai presto una risposta.', 'success');
             
             // Resetta il form
             form.reset();
+            
+            // Scarica automaticamente il PDF
+            downloadPDF();
         })
         .catch(error => {
             console.error('Errore:', error);
             
-            // Mostra messaggio di errore ma conferma che il PDF è stato generato
-            showMessage('Si è verificato un problema con l\'invio del form, ma il PDF è stato generato e scaricato correttamente. Per completare l\'iscrizione, ti preghiamo di inviare il PDF a riccardo.casafino@gmail.com insieme alle tue foto.', 'warning');
+            // Fallback: se l'invio diretto fallisce, mostra istruzioni per l'invio manuale
+            showMessage('Si è verificato un problema con l\'invio automatico. Il PDF è stato generato, puoi scaricarlo e inviarlo manualmente a riccardo.casafino@gmail.com', 'warning');
+            
+            // Scarica il PDF
+            downloadPDF();
         });
+    }
+    
+    // Funzione per scaricare il PDF
+    function downloadPDF() {
+        // Raccolta dati dal form
+        const formData = new FormData(form);
+        const formDataObj = {};
+        
+        formData.forEach((value, key) => {
+            formDataObj[key] = value;
+        });
+        
+        // Genera il PDF
+        const pdfBlob = generatePDF(formDataObj);
+        
+        // Crea un URL per il blob
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        
+        // Crea un link per il download
+        const downloadLink = document.createElement('a');
+        downloadLink.href = pdfUrl;
+        downloadLink.download = 'SecondLife_Questionario_' + formDataObj.nome.replace(/\s+/g, '_') + '.pdf';
+        
+        // Aggiungi il link al documento e simula il click
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        
+        // Rimuovi il link
+        document.body.removeChild(downloadLink);
     }
     
     // Funzione per mostrare messaggi all'utente
@@ -357,17 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Crea il nuovo messaggio
         const messageElement = document.createElement('div');
         messageElement.className = `form-message ${type}`;
-        
-        // Aggiungi icona di caricamento se necessario
-        if (type === 'loading') {
-            const spinner = document.createElement('span');
-            spinner.className = 'loading-spinner';
-            messageElement.appendChild(spinner);
-        }
-        
-        // Aggiungi il testo del messaggio
-        const textNode = document.createTextNode(message);
-        messageElement.appendChild(textNode);
+        messageElement.textContent = message;
         
         // Aggiungi il messaggio prima del pulsante di invio
         const submitButton = document.getElementById('submit-button');
@@ -390,4 +416,57 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 10000);
         }
     }
+    
+    // Aggiungi stili CSS per i messaggi
+    const style = document.createElement('style');
+    style.textContent = `
+        .form-message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        
+        .form-message.success {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        
+        .form-message.warning {
+            background-color: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+            border: 1px solid #f1c40f;
+        }
+        
+        .form-message.error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .form-message.loading {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            border: 1px solid #3498db;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .form-group input.error,
+        .form-group textarea.error,
+        .form-group select.error {
+            border-color: #e74c3c;
+        }
+        
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+    `;
+    document.head.appendChild(style);
 });
