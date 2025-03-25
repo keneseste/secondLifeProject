@@ -52,7 +52,6 @@ Per configurare correttamente Formspree:
 // Modifica questa riga
 fetch('https://formspree.io/f/CODICE_FORMSPREE', {
 ```
-
 Sostituisci `CODICE_FORMSPREE` con il codice del tuo form Formspree.
 
 ### 5. Test della funzionalità
