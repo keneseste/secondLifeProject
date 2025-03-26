@@ -853,20 +853,6 @@ document.addEventListener('DOMContentLoaded', function() {
             creator: 'SecondLife Project'
         });
         
-        // Genera l'intestazione della scheda
-        const headerHTML = `
-            <div class="scheda-header">
-                <img src="../images/SECONDLIFE_colorYW.png" alt="SecondLife Project Logo">
-                <h1>${formData.nomeScheda}</h1>
-            </div>
-            
-            <div class="scheda-info">
-                <p><strong>Cliente:</strong> ${formData.cliente}</p>
-                <p><strong>Data di inizio:</strong> ${formData.dataInizioFormatted}</p>
-                <p><strong>Durata:</strong> ${formData.durataScheda}</p>
-            </div>
-        `;
-        
         // Genera il footer della scheda
         const footerHTML = `
             <div class="scheda-footer">
@@ -874,93 +860,108 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         
-        // Funzione per generare una promessa per ogni giornata
-        const generatePagePromises = [];
-        
-        // Prima pagina con intestazione
-        schedaPreview.innerHTML = headerHTML;
-        schedaPreview.style.display = 'block';
-        
-        // Genera la prima pagina con l'intestazione
-        const headerPromise = html2canvas(schedaPreview, {
-            scale: 2,
-            useCORS: true,
-            logging: false
-        }).then(canvas => {
-            const imgData = canvas.toDataURL('image/jpeg', 1.0);
-            const imgWidth = 210; // Larghezza A4 in mm
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-            
-            // Aggiungi l'intestazione alla prima pagina
-            doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
-            
-            return true;
-        });
-        
-        generatePagePromises.push(headerPromise);
-        
-        // Genera una pagina per ogni giornata
-        formData.giornate.forEach((giornata, index) => {
-            // Genera l'HTML per questa giornata
-            const giornataHTML = `
-                <div class="giornata-section">
-                    <div class="giornata-title">
-                        ${giornata.nome}
+        // Approccio sequenziale per garantire una giornata per pagina
+        async function generatePDFSequentially() {
+            try {
+                // Prima pagina con intestazione
+                const headerHTML = `
+                    <div class="scheda-header">
+                        <img src="../images/SECONDLIFE_colorYW.png" alt="SecondLife Project Logo">
+                        <h1>${formData.nomeScheda}</h1>
                     </div>
-                    <div class="esercizi-list">
-                        ${giornata.esercizi.map(esercizio => `
-                            <div class="esercizio-item">
-                                <div class="esercizio-nome">${esercizio.nome}</div>
-                                <div class="esercizio-dettagli">
-                                    <span><strong>Serie:</strong> ${esercizio.serie}</span>
-                                    <span><strong>Ripetizioni:</strong> ${esercizio.ripetizioni}</span>
-                                    <span><strong>Recupero:</strong> ${esercizio.recupero} sec</span>
-                                </div>
-                                ${esercizio.note ? `<div class="esercizio-note"><strong>Note:</strong> ${esercizio.note}</div>` : ''}
-                                ${esercizio.linkVideo ? `<div class="esercizio-video"><strong>Video:</strong> <a href="${esercizio.linkVideo}" target="_blank">${esercizio.linkVideo}</a></div>` : ''}
+                    
+                    <div class="scheda-info">
+                        <p><strong>Cliente:</strong> ${formData.cliente}</p>
+                        <p><strong>Data di inizio:</strong> ${formData.dataInizioFormatted}</p>
+                        <p><strong>Durata:</strong> ${formData.durataScheda}</p>
+                    </div>
+                    ${footerHTML}
+                `;
+                
+                // Renderizza l'intestazione
+                schedaPreview.innerHTML = headerHTML;
+                schedaPreview.style.display = 'block';
+                
+                // Genera la prima pagina con l'intestazione
+                const headerCanvas = await html2canvas(schedaPreview, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+                
+                const headerImgData = headerCanvas.toDataURL('image/jpeg', 1.0);
+                const headerImgWidth = 210; // Larghezza A4 in mm
+                const headerImgHeight = headerCanvas.height * headerImgWidth / headerCanvas.width;
+                
+                // Aggiungi l'intestazione alla prima pagina
+                doc.addImage(headerImgData, 'JPEG', 0, 0, headerImgWidth, headerImgHeight);
+                
+                // Genera una pagina per ogni giornata
+                for (let i = 0; i < formData.giornate.length; i++) {
+                    const giornata = formData.giornate[i];
+                    
+                    // Aggiungi una nuova pagina per ogni giornata
+                    doc.addPage();
+                    
+                    // Genera l'HTML per questa giornata
+                    const giornataHTML = `
+                        <div class="giornata-section">
+                            <div class="giornata-title">
+                                ${giornata.nome}
                             </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ${footerHTML}
-            `;
-            
-            // Imposta l'HTML per questa giornata
-            schedaPreview.innerHTML = giornataHTML;
-            
-            // Genera una promessa per questa giornata
-            const giornataPromise = html2canvas(schedaPreview, {
-                scale: 2,
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                const imgWidth = 210; // Larghezza A4 in mm
-                const imgHeight = canvas.height * imgWidth / canvas.width;
+                            <div class="esercizi-list">
+                                ${giornata.esercizi.map(esercizio => `
+                                    <div class="esercizio-item">
+                                        <div class="esercizio-nome">${esercizio.nome}</div>
+                                        <div class="esercizio-dettagli">
+                                            <span><strong>Serie:</strong> ${esercizio.serie}</span>
+                                            <span><strong>Ripetizioni:</strong> ${esercizio.ripetizioni}</span>
+                                            <span><strong>Recupero:</strong> ${esercizio.recupero} sec</span>
+                                        </div>
+                                        ${esercizio.note ? `<div class="esercizio-note"><strong>Note:</strong> ${esercizio.note}</div>` : ''}
+                                        ${esercizio.linkVideo ? `<div class="esercizio-video"><strong>Video:</strong> <a href="${esercizio.linkVideo}" target="_blank">${esercizio.linkVideo}</a></div>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ${footerHTML}
+                    `;
+                    
+                    // Imposta l'HTML per questa giornata
+                    schedaPreview.innerHTML = giornataHTML;
+                    
+                    // Renderizza la giornata
+                    const giornataCanvas = await html2canvas(schedaPreview, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false
+                    });
+                    
+                    const giornataImgData = giornataCanvas.toDataURL('image/jpeg', 1.0);
+                    const giornataImgWidth = 210; // Larghezza A4 in mm
+                    const giornataImgHeight = giornataCanvas.height * giornataImgWidth / giornataCanvas.width;
+                    
+                    // Aggiungi l'immagine della giornata alla nuova pagina
+                    doc.addImage(giornataImgData, 'JPEG', 0, 0, giornataImgWidth, giornataImgHeight);
+                }
                 
-                // Aggiungi una nuova pagina per ogni giornata (tranne la prima che va dopo l'intestazione)
-                doc.addPage();
+                // Salva il PDF
+                const fileName = `SecondLife_Scheda_${formData.cliente.replace(/\s+/g, '_')}.pdf`;
+                doc.save(fileName);
                 
-                // Aggiungi l'immagine della giornata
-                doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+                // Nascondi l'anteprima
+                schedaPreview.style.display = 'none';
                 
-                return true;
-            });
-            
-            generatePagePromises.push(giornataPromise);
-        });
+                // Mostra un messaggio di successo
+                alert('PDF generato con successo! Il file è stato scaricato sul tuo dispositivo.');
+            } catch (error) {
+                console.error('Errore nella generazione del PDF:', error);
+                alert('Si è verificato un errore durante la generazione del PDF. Riprova.');
+                schedaPreview.style.display = 'none';
+            }
+        }
         
-        // Quando tutte le pagine sono state generate
-        Promise.all(generatePagePromises).then(() => {
-            // Salva il PDF
-            const fileName = `SecondLife_Scheda_${formData.cliente.replace(/\s+/g, '_')}.pdf`;
-            doc.save(fileName);
-            
-            // Nascondi l'anteprima
-            schedaPreview.style.display = 'none';
-            
-            // Mostra un messaggio di successo
-            alert('PDF generato con successo! Il file è stato scaricato sul tuo dispositivo.');
-        });
+        // Avvia la generazione sequenziale del PDF
+        generatePDFSequentially();
     }
 });
