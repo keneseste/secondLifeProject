@@ -181,10 +181,16 @@
     background-color: rgba(0, 183, 255, 0.3);
 }
 
-/* Stili per il pulsante di generazione PDF */
+/* Stili per i pulsanti principali */
 .form-actions {
     margin-top: 3rem;
     text-align: center;
+}
+
+.form-header-actions {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: right;
 }
 
 #generate-pdf {
@@ -198,6 +204,76 @@
 #generate-pdf i {
     margin-right: 0.8rem;
     font-size: 1.3rem;
+}
+
+.action-button {
+    background-color: transparent;
+    color: #00b7ff;
+    border: 1px solid #00b7ff;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.action-button i {
+    margin-right: 0.5rem;
+}
+
+.action-button:hover {
+    background-color: rgba(0, 183, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Stile per il pulsante template */
+.template-button {
+    background-color: #00b7ff;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1.5rem;
+    font-weight: 600;
+}
+
+.template-button i {
+    margin-right: 0.8rem;
+}
+
+.template-button:hover {
+    background-color: #0095cc;
+    transform: translateY(-2px);
+}
+
+/* Stili per i pulsanti di duplicazione */
+.duplicate-button {
+    background-color: transparent;
+    color: #00b7ff;
+    border: 1px solid #00b7ff;
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+}
+
+.duplicate-button:hover {
+    background-color: rgba(0, 183, 255, 0.1);
+    transform: scale(1.1);
 }
 
 /* Animazioni */
@@ -215,6 +291,26 @@
 
 #generate-pdf:hover {
     animation: pulse 1.5s infinite;
+}
+
+/* Stili per i messaggi di errore */
+.error-message {
+    color: #ff3a3a;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.error-message::before {
+    content: "⚠️";
+    margin-right: 0.5rem;
+}
+
+input.error, select.error, textarea.error {
+    border-color: #ff3a3a !important;
+    box-shadow: 0 0 0 1px #ff3a3a;
 }
 
 /* Stili per l'anteprima della scheda (usata per il PDF) */

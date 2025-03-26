@@ -12,8 +12,264 @@ document.addEventListener('DOMContentLoaded', function() {
     // Contatori per giornate ed esercizi
     let giornataCounter = 0;
     
+    // Aggiungi pulsante per caricare il template precompilato
+    const loadTemplateBtn = document.createElement('button');
+    loadTemplateBtn.type = 'button';
+    loadTemplateBtn.id = 'load-template';
+    loadTemplateBtn.className = 'template-button';
+    loadTemplateBtn.innerHTML = '<i class="fas fa-magic"></i> Carica Template di Esempio';
+    loadTemplateBtn.addEventListener('click', loadTemplateData);
+    
+    // Inserisci il pulsante prima del form
+    const formIntro = document.querySelector('.form-intro');
+    formIntro.appendChild(loadTemplateBtn);
+    
     // Inizializzazione: aggiungi la prima giornata
     addGiornata();
+    
+    // Funzione per caricare il template precompilato
+    function loadTemplateData() {
+        // Conferma prima di sovrascrivere i dati esistenti
+        if (document.querySelectorAll('.giornata-item').length > 1 || 
+            document.getElementById('nome-cliente').value || 
+            document.getElementById('nome-scheda').value) {
+            if (!confirm('Questa azione sovrascriverà tutti i dati inseriti. Continuare?')) {
+                return;
+            }
+        }
+        
+        // Rimuovi tutte le giornate esistenti
+        document.querySelectorAll('.giornata-item').forEach(item => item.remove());
+        giornataCounter = 0;
+        
+        // Compila i dati generali
+        document.getElementById('nome-cliente').value = 'Mario Rossi';
+        document.getElementById('data-inizio').value = new Date().toISOString().split('T')[0]; // Data odierna
+        document.getElementById('durata-scheda').value = '8 settimane';
+        document.getElementById('nome-scheda').value = 'Forza e Ipertrofia - Upper/Lower Split';
+        
+        // Template dati per 4 giornate
+        const templateData = [
+            {
+                nome: 'Giorno 1 - Upper Body Forza',
+                esercizi: [
+                    {
+                        nome: 'Panca Piana',
+                        link: 'https://www.youtube.com/watch?v=rT7DgCr-3pg',
+                        serie: 4,
+                        ripetizioni: '6-8',
+                        recupero: 180,
+                        note: 'Controllo eccentrico, focus sulla contrazione del petto'
+                    },
+                    {
+                        nome: 'Trazioni alla Sbarra',
+                        link: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
+                        serie: 4,
+                        ripetizioni: '6-8',
+                        recupero: 180,
+                        note: 'Scapole retratte, focus sulla schiena'
+                    },
+                    {
+                        nome: 'Military Press',
+                        link: 'https://www.youtube.com/watch?v=2yjwXTZQDDI',
+                        serie: 3,
+                        ripetizioni: '8-10',
+                        recupero: 120,
+                        note: 'Core stabile, evitare inarcamento lombare'
+                    },
+                    {
+                        nome: 'Curl con Bilanciere',
+                        link: 'https://www.youtube.com/watch?v=kwG2ipFRgfo',
+                        serie: 3,
+                        ripetizioni: '8-10',
+                        recupero: 90,
+                        note: 'Gomiti fermi, focus sulla contrazione'
+                    },
+                    {
+                        nome: 'French Press',
+                        link: 'https://www.youtube.com/watch?v=_gsUck-7M74',
+                        serie: 3,
+                        ripetizioni: '8-10',
+                        recupero: 90,
+                        note: 'Gomiti fermi, estensione completa'
+                    }
+                ]
+            },
+            {
+                nome: 'Giorno 2 - Lower Body Forza',
+                esercizi: [
+                    {
+                        nome: 'Squat',
+                        link: 'https://www.youtube.com/watch?v=ultWZbUMPL8',
+                        serie: 4,
+                        ripetizioni: '6-8',
+                        recupero: 180,
+                        note: 'Profondità parallela, ginocchia in linea con i piedi'
+                    },
+                    {
+                        nome: 'Stacco Rumeno',
+                        link: 'https://www.youtube.com/watch?v=jEy_czb3RKA',
+                        serie: 4,
+                        ripetizioni: '6-8',
+                        recupero: 180,
+                        note: 'Schiena neutra, focus sugli hamstring'
+                    },
+                    {
+                        nome: 'Affondi con Manubri',
+                        link: 'https://www.youtube.com/watch?v=D7KaRcUTQeE',
+                        serie: 3,
+                        ripetizioni: '10-12 per gamba',
+                        recupero: 120,
+                        note: 'Ginocchio posteriore vicino al pavimento'
+                    },
+                    {
+                        nome: 'Leg Curl',
+                        link: 'https://www.youtube.com/watch?v=1Tq3QdYUuHs',
+                        serie: 3,
+                        ripetizioni: '10-12',
+                        recupero: 90,
+                        note: 'Contrazione completa, focus sugli hamstring'
+                    },
+                    {
+                        nome: 'Standing Calf Raise',
+                        link: 'https://www.youtube.com/watch?v=-M4-G8p8fmc',
+                        serie: 4,
+                        ripetizioni: '12-15',
+                        recupero: 60,
+                        note: 'Estensione completa, contrazione in alto'
+                    }
+                ]
+            },
+            {
+                nome: 'Giorno 3 - Upper Body Ipertrofia',
+                esercizi: [
+                    {
+                        nome: 'Panca Inclinata con Manubri',
+                        link: 'https://www.youtube.com/watch?v=0G2_XV7slIg',
+                        serie: 3,
+                        ripetizioni: '10-12',
+                        recupero: 90,
+                        note: 'Rotazione dei polsi a fine movimento'
+                    },
+                    {
+                        nome: 'Lat Machine Presa Larga',
+                        link: 'https://www.youtube.com/watch?v=CAwf7n6Luuc',
+                        serie: 3,
+                        ripetizioni: '10-12',
+                        recupero: 90,
+                        note: 'Tirare verso lo sterno, scapole retratte'
+                    },
+                    {
+                        nome: 'Alzate Laterali',
+                        link: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+                        serie: 3,
+                        ripetizioni: '12-15',
+                        recupero: 60,
+                        note: 'Gomiti leggermente flessi, movimento controllato'
+                    },
+                    {
+                        nome: 'Curl Alternato con Manubri',
+                        link: 'https://www.youtube.com/watch?v=sAq_ocpRh_I',
+                        serie: 3,
+                        ripetizioni: '12-15',
+                        recupero: 60,
+                        note: 'Supinazione durante la salita'
+                    },
+                    {
+                        nome: 'Push Down con Corda',
+                        link: 'https://www.youtube.com/watch?v=vB5OHsJ3EME',
+                        serie: 3,
+                        ripetizioni: '12-15',
+                        recupero: 60,
+                        note: 'Aprire leggermente le mani a fine movimento'
+                    }
+                ]
+            },
+            {
+                nome: 'Giorno 4 - Lower Body Ipertrofia',
+                esercizi: [
+                    {
+                        nome: 'Leg Press',
+                        link: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
+                        serie: 3,
+                        ripetizioni: '10-12',
+                        recupero: 120,
+                        note: 'Piedi posizione media, estensione completa'
+                    },
+                    {
+                        nome: 'Leg Extension',
+                        link: 'https://www.youtube.com/watch?v=YyvSfVjQeL0',
+                        serie: 3,
+                        ripetizioni: '12-15',
+                        recupero: 60,
+                        note: 'Contrazione in alto, discesa controllata'
+                    },
+                    {
+                        nome: 'Glute Bridge',
+                        link: 'https://www.youtube.com/watch?v=OUgsJ8-Vi0E',
+                        serie: 3,
+                        ripetizioni: '12-15',
+                        recupero: 60,
+                        note: 'Contrazione completa dei glutei in alto'
+                    },
+                    {
+                        nome: 'Seated Leg Curl',
+                        link: 'https://www.youtube.com/watch?v=F488k67BTNo',
+                        serie: 3,
+                        ripetizioni: '12-15',
+                        recupero: 60,
+                        note: 'Contrazione completa, focus sugli hamstring'
+                    },
+                    {
+                        nome: 'Seated Calf Raise',
+                        link: 'https://www.youtube.com/watch?v=JbyjNymZOt0',
+                        serie: 4,
+                        ripetizioni: '15-20',
+                        recupero: 45,
+                        note: 'Estensione completa, contrazione in alto'
+                    }
+                ]
+            }
+        ];
+        
+        // Crea le giornate con i relativi esercizi
+        templateData.forEach(giornataData => {
+            // Aggiungi una nuova giornata
+            addGiornata();
+            
+            // Seleziona l'ultima giornata aggiunta
+            const giornataItem = document.querySelector('.giornata-item:last-child');
+            const giornataBox = giornataItem.querySelector('.giornata-box');
+            
+            // Compila il nome della giornata
+            giornataBox.querySelector('.nome-giornata').value = giornataData.nome;
+            
+            // Rimuovi l'esercizio iniziale vuoto
+            const eserciziContainer = giornataBox.querySelector('.esercizi-container');
+            eserciziContainer.querySelectorAll('.esercizio-item').forEach(item => item.remove());
+            
+            // Aggiungi gli esercizi
+            giornataData.esercizi.forEach(esercizioData => {
+                // Aggiungi un nuovo esercizio
+                addEsercizio(giornataBox);
+                
+                // Seleziona l'ultimo esercizio aggiunto
+                const esercizioItem = eserciziContainer.querySelector('.esercizio-item:last-child');
+                const esercizioBox = esercizioItem.querySelector('.esercizio-box');
+                
+                // Compila i dati dell'esercizio
+                esercizioBox.querySelector('.nome-esercizio').value = esercizioData.nome;
+                esercizioBox.querySelector('.link-video').value = esercizioData.link;
+                esercizioBox.querySelector('.serie-esercizio').value = esercizioData.serie;
+                esercizioBox.querySelector('.ripetizioni-esercizio').value = esercizioData.ripetizioni;
+                esercizioBox.querySelector('.recupero-esercizio').value = esercizioData.recupero;
+                esercizioBox.querySelector('.note-esercizio').value = esercizioData.note;
+            });
+        });
+        
+        // Notifica l'utente
+        alert('Template di esempio caricato con successo! Ora puoi modificarlo o generare direttamente il PDF.');
+    }
     
     // Event listener per aggiungere una nuova giornata
     addGiornataBtn.addEventListener('click', addGiornata);
@@ -26,6 +282,46 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Per favore, compila tutti i campi obbligatori prima di generare il PDF.');
         }
     });
+    
+    // Event listener per duplicare la scheda completa
+    const duplicateSchedaBtn = document.getElementById('duplicate-scheda');
+    duplicateSchedaBtn.addEventListener('click', function() {
+        duplicateScheda();
+    });
+    
+    // Funzione per duplicare l'intera scheda
+    function duplicateScheda() {
+        // Chiedi il nome del nuovo cliente
+        const nuovoNomeCliente = prompt('Inserisci il nome del nuovo cliente:');
+        if (!nuovoNomeCliente || nuovoNomeCliente.trim() === '') {
+            alert('È necessario inserire un nome cliente valido per duplicare la scheda.');
+            return;
+        }
+        
+        // Salva i dati attuali della scheda
+        const schedaAttuale = collectFormData();
+        
+        // Conferma prima di procedere
+        if (!confirm(`Stai per creare una copia della scheda attuale per il cliente "${nuovoNomeCliente}". Continuare?`)) {
+            return;
+        }
+        
+        // Salva la scheda attuale in localStorage
+        const timestamp = new Date().getTime();
+        const schedaKey = `scheda_${timestamp}`;
+        
+        // Aggiorna il nome del cliente
+        schedaAttuale.cliente = nuovoNomeCliente;
+        
+        // Salva la scheda in localStorage
+        localStorage.setItem(schedaKey, JSON.stringify(schedaAttuale));
+        
+        // Notifica l'utente
+        alert(`Scheda duplicata con successo per il cliente "${nuovoNomeCliente}"! La scheda è stata salvata e può essere caricata in futuro.`);
+        
+        // Aggiorna il nome del cliente nel form
+        document.getElementById('nome-cliente').value = nuovoNomeCliente;
+    }
     
     // Funzione per aggiungere una nuova giornata
     function addGiornata() {
@@ -56,6 +352,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+        // Event listener per duplicare la giornata
+        const duplicateGiornataBtn = giornataClone.querySelector('.duplicate-giornata');
+        duplicateGiornataBtn.addEventListener('click', function() {
+            duplicateGiornata(giornataBox);
+        });
+        
         // Event listener per aggiungere un nuovo esercizio
         const addEsercizioBtn = giornataClone.querySelector('.add-esercizio');
         addEsercizioBtn.addEventListener('click', function() {
@@ -67,6 +369,46 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Aggiungi il primo esercizio alla giornata
         addEsercizio(giornataBox);
+    }
+    
+    // Funzione per duplicare una giornata
+    function duplicateGiornata(giornataBox) {
+        // Aggiungi una nuova giornata vuota
+        addGiornata();
+        
+        // Seleziona l'ultima giornata aggiunta (quella appena creata)
+        const nuovaGiornataItem = document.querySelector('.giornata-item:last-child');
+        const nuovaGiornataBox = nuovaGiornataItem.querySelector('.giornata-box');
+        
+        // Copia il nome della giornata
+        nuovaGiornataBox.querySelector('.nome-giornata').value = giornataBox.querySelector('.nome-giornata').value;
+        
+        // Rimuovi l'esercizio iniziale vuoto
+        const nuoviEserciziContainer = nuovaGiornataBox.querySelector('.esercizi-container');
+        nuoviEserciziContainer.querySelectorAll('.esercizio-item').forEach(item => item.remove());
+        
+        // Copia tutti gli esercizi dalla giornata originale
+        const eserciziOriginali = giornataBox.querySelectorAll('.esercizio-item');
+        eserciziOriginali.forEach(esercizioItem => {
+            // Aggiungi un nuovo esercizio vuoto
+            addEsercizio(nuovaGiornataBox);
+            
+            // Seleziona l'ultimo esercizio aggiunto
+            const nuovoEsercizioItem = nuoviEserciziContainer.querySelector('.esercizio-item:last-child');
+            const nuovoEsercizioBox = nuovoEsercizioItem.querySelector('.esercizio-box');
+            
+            // Copia i valori dall'esercizio originale
+            const esercizioBox = esercizioItem.querySelector('.esercizio-box');
+            nuovoEsercizioBox.querySelector('.nome-esercizio').value = esercizioBox.querySelector('.nome-esercizio').value;
+            nuovoEsercizioBox.querySelector('.link-video').value = esercizioBox.querySelector('.link-video').value;
+            nuovoEsercizioBox.querySelector('.serie-esercizio').value = esercizioBox.querySelector('.serie-esercizio').value;
+            nuovoEsercizioBox.querySelector('.ripetizioni-esercizio').value = esercizioBox.querySelector('.ripetizioni-esercizio').value;
+            nuovoEsercizioBox.querySelector('.recupero-esercizio').value = esercizioBox.querySelector('.recupero-esercizio').value;
+            nuovoEsercizioBox.querySelector('.note-esercizio').value = esercizioBox.querySelector('.note-esercizio').value;
+        });
+        
+        // Scorri alla nuova giornata
+        nuovaGiornataBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
     // Funzione per aggiungere un nuovo esercizio
@@ -100,8 +442,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+        // Event listener per duplicare l'esercizio
+        const duplicateEsercizioBtn = esercizioClone.querySelector('.duplicate-esercizio');
+        duplicateEsercizioBtn.addEventListener('click', function() {
+            duplicateEsercizio(esercizioBox);
+        });
+        
         // Inserisci l'esercizio nel container
         eserciziContainer.appendChild(esercizioClone);
+    }
+    
+    // Funzione per duplicare un esercizio
+    function duplicateEsercizio(esercizioBox) {
+        const giornataBox = esercizioBox.closest('.giornata-box');
+        const eserciziContainer = giornataBox.querySelector('.esercizi-container');
+        
+        // Aggiungi un nuovo esercizio vuoto
+        addEsercizio(giornataBox);
+        
+        // Seleziona l'ultimo esercizio aggiunto (quello appena creato)
+        const nuovoEsercizioItem = eserciziContainer.querySelector('.esercizio-item:last-child');
+        const nuovoEsercizioBox = nuovoEsercizioItem.querySelector('.esercizio-box');
+        
+        // Copia i valori dall'esercizio originale
+        nuovoEsercizioBox.querySelector('.nome-esercizio').value = esercizioBox.querySelector('.nome-esercizio').value;
+        nuovoEsercizioBox.querySelector('.link-video').value = esercizioBox.querySelector('.link-video').value;
+        nuovoEsercizioBox.querySelector('.serie-esercizio').value = esercizioBox.querySelector('.serie-esercizio').value;
+        nuovoEsercizioBox.querySelector('.ripetizioni-esercizio').value = esercizioBox.querySelector('.ripetizioni-esercizio').value;
+        nuovoEsercizioBox.querySelector('.recupero-esercizio').value = esercizioBox.querySelector('.recupero-esercizio').value;
+        nuovoEsercizioBox.querySelector('.note-esercizio').value = esercizioBox.querySelector('.note-esercizio').value;
+        
+        // Scorri al nuovo esercizio
+        nuovoEsercizioBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     
     // Funzione per aggiornare i numeri delle giornate
@@ -133,6 +505,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Funzione per validare il form
     function validateForm() {
         let isValid = true;
+        let firstInvalidElement = null;
+        
+        // Rimuovi tutti i messaggi di errore esistenti
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
         
         // Valida i campi generali
         const requiredInputs = document.querySelectorAll('input[required], select[required], textarea[required]');
@@ -140,10 +517,32 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!input.value.trim()) {
                 isValid = false;
                 input.classList.add('error');
+                
+                // Crea un messaggio di errore
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'error-message';
+                errorMsg.textContent = 'Campo obbligatorio';
+                
+                // Trova il parent form-group
+                const formGroup = input.closest('.form-group');
+                if (formGroup) {
+                    formGroup.appendChild(errorMsg);
+                }
+                
+                // Salva il primo elemento non valido per lo scroll
+                if (!firstInvalidElement) {
+                    firstInvalidElement = input;
+                }
             } else {
                 input.classList.remove('error');
             }
         });
+        
+        // Scorri al primo elemento non valido
+        if (firstInvalidElement) {
+            firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalidElement.focus();
+        }
         
         return isValid;
     }
