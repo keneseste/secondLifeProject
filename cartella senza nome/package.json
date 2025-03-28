@@ -1,0 +1,20 @@
+{
+  "name": "secondlife-project",
+  "version": "1.0.0",
+  "description": "SecondLife Project landing page with AI chatbot",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "secondlife",
+    "fitness",
+    "coaching",
+    "chatbot"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.2"
+  }
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecondLife Project - Questionario Iniziale</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../additional.css">
+    <link rel="stylesheet" href="../brand.css">
+    <link rel="stylesheet" href="../testimonials.css">
+    <link rel="stylesheet" href="../coaching.css">
+    <link rel="stylesheet" href="questionario.css">
+    <link rel="stylesheet" href="form-validation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="../images/SECONDLIFE_colorYW.png" alt="SecondLife Project Logo" class="logo-img"></a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html#come-funziona">Come Funziona</a></li>
+                    <li><a href="../index.html#benefici">Benefici</a></li>
+                    <li><a href="../index.html#target">Per Chi</a></li>
+                    <li><a href="../index.html#coaching">Coaching</a></li>
+                    <li><a href="../index.html#contatti" class="cta-button">Inizia Ora</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Questionario Section -->
+    <section id="questionario">
+        <div class="container">
+            <h2 class="section-title">SECOND LIFE PROJECT - QUESTIONARIO INIZIALE</h2>
+            
+            <div class="form-intro">
+                <h3>INIZIA IL TUO PERCORSO DI TRASFORMAZIONE</h3>
+                <p>Questo questionario è il primo passo per creare il tuo programma personalizzato. Rispondi con sincerità a tutte le domande per permetterci di conoscere meglio le tue esigenze, obiettivi e situazione attuale.</p>
+                <p>Una volta completato, riceverai una consulenza personalizzata basata sulle tue risposte.</p>
+            </div>
+            
+            <div class="contact-form questionario-form">
+                <form id="questionario-form">
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Dati Anagrafici</h3>
+                        
+                        <div class="form-group">
+                            <label for="nome">Nome e Cognome</label>
+                            <input type="text" id="nome" name="nome" placeholder="Inserisci il tuo nome completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="La tua email principale" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="eta">Età</label>
+                                <input type="number" id="eta" name="eta" placeholder="Anni" min="18" max="99" required>
+                            </div>
+                            
+                            <div class="form-group half">
+                                <label for="altezza">Altezza (cm)</label>
+                                <input type="number" id="altezza" name="altezza" placeholder="cm" min="140" max="220" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="peso">Peso attuale (kg)</label>
+                            <input type="number" id="peso" name="peso" placeholder="kg" min="40" max="200" step="0.1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-dumbbell"></i> Esperienza e Allenamento</h3>
+                        
+                        <div class="form-group">
+                            <label for="esperienza">Da quanto tempo ti alleni (se ti alleni)?</label>
+                            <select id="esperienza" name="esperienza" required>
+                                <option value="" disabled selected>Seleziona un'opzione</option>
+                                <option value="Mai allenato">Mai allenato/a</option>
+                                <option value="Meno di 6 mesi">Meno di 6 mesi</option>
+                                <option value="6-12 mesi">6-12 mesi</option>
+                                <option value="1-3 anni">1-3 anni</option>
+                                <option value="Più di 3 anni">Più di 3 anni</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="frequenza">Quante volte a settimana riesci ad allenarti?</label>
+                            <select id="frequenza" name="frequenza" required>
+                                <option value="" disabled selected>Seleziona un'opzione</option>
+                                <option value="1-2 volte">1-2 volte</option>
+                                <option value="3 volte">3 volte</option>
+                                <option value="4-5 volte">4-5 volte</option>
+                                <option value="6+ volte">6+ volte</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="durata">Quanto tempo hai a disposizione per ogni sessione?</label>
+                            <select id="durata" name="durata" required>
+                                <option value="" disabled selected>Seleziona un'opzione</option>
+                                <option value="30-45 minuti">30-45 minuti</option>
+                                <option value="45-60 minuti">45-60 minuti</option>
+                                <option value="60-90 minuti">60-90 minuti</option>
+                                <option value="Più di 90 minuti">Più di 90 minuti</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-bullseye"></i> Obiettivi</h3>
+                        
+                        <div class="form-group">
+                            <label for="obiettivo">Qual è il tuo obiettivo principale (fisico o mentale)?</label>
+                            <select id="obiettivo" name="obiettivo" required>
+                                <option value="" disabled selected>Seleziona un'opzione</option>
+                                <option value="Perdita di peso">Perdita di peso</option>
+                                <option value="Aumento massa muscolare">Aumento massa muscolare</option>
+                                <option value="Tonificazione">Tonificazione</option>
+                                <option value="Miglioramento salute">Miglioramento salute</option>
+                                <option value="Gestione stress">Gestione stress</option>
+                                <option value="Miglioramento performance">Miglioramento performance</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="aspettative">Cosa vuoi ottenere da questo percorso?</label>
+                            <textarea id="aspettative" name="aspettative" rows="4" placeholder="Descrivi le tue aspettative e obiettivi specifici" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-briefcase"></i> Stile di Vita</h3>
+                        
+                        <div class="form-group">
+                            <label for="lavoro">Che lavoro fai (in modo generale)?</label>
+                            <input type="text" id="lavoro" name="lavoro" placeholder="Es. Impiegato, Libero professionista, ecc." required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sonno">Quante ore dormi di notte?</label>
+                            <select id="sonno" name="sonno" required>
+                                <option value="" disabled selected>Seleziona un'opzione</option>
+                                <option value="Meno di 5 ore">Meno di 5 ore</option>
+                                <option value="5-6 ore">5-6 ore</option>
+                                <option value="7-8 ore">7-8 ore</option>
+                                <option value="Più di 8 ore">Più di 8 ore</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Ti senti spesso stressato/a?</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="stress" value="Basso" required>
+                                    <span>Basso</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="stress" value="Medio" required>
+                                    <span>Medio</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="stress" value="Alto" required>
+                                    <span>Alto</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-apple-alt"></i> Alimentazione</h3>
+                        
+                        <div class="form-group">
+                            <label>Vuoi essere seguito/a con macros e dieta flessibile?</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="dieta" value="Sì" required>
+                                    <span>Sì</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="dieta" value="No" required>
+                                    <span>No</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-running"></i> Allenamento & Preferenze</h3>
+                        
+                        <div class="form-group">
+                            <label>Hai attrezzi a casa o ti alleni in palestra?</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="luogo" value="Casa" required>
+                                    <span>Casa</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="luogo" value="Palestra" required>
+                                    <span>Palestra</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="luogo" value="Entrambi" required>
+                                    <span>Entrambi</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="infortuni">Ci sono esercizi che non puoi fare per dolori o infortuni?</label>
+                            <textarea id="infortuni" name="infortuni" rows="3" placeholder="Descrivi eventuali limitazioni o infortuni"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="altri_sport">Pratichi altri sport oltre la palestra?</label>
+                            <input type="text" id="altri_sport" name="altri_sport" placeholder="Es. Nuoto, Calcio, ecc.">
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-camera"></i> Foto Iniziali</h3>
+                        <p class="photo-info">Le foto sono fondamentali per monitorare i progressi. Ti chiediamo gentilmente di inviarle via email a <strong>riccardo.casafino@gmail.com</strong> dopo aver compilato questo questionario.</p>
+                        
+                        <ul class="photo-list">
+                            <li><i class="fas fa-check-circle"></i> 1 foto frontale (rilassata)</li>
+                            <li><i class="fas fa-check-circle"></i> 1 foto laterale (rilassata)</li>
+                            <li><i class="fas fa-check-circle"></i> 1 foto posteriore (rilassata)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-question-circle"></i> Impegno</h3>
+                        <p>Quanto sei disposto/a a impegnarti in questo percorso?</p>
+                        
+                        <div class="commitment-options">
+                            <label class="commitment-option">
+                                <input type="radio" name="impegno" value="Moderato" required>
+                                <div class="commitment-content">
+                                    <h4>Voglio migliorare, ma senza stravolgere la mia vita</h4>
+                                    <p>Sono pronto/a a fare cambiamenti graduali che si adattino al mio stile di vita attuale</p>
+                                </div>
+                            </label>
+                            
+                            <label class="commitment-option">
+                                <input type="radio" name="impegno" value="Massimo" required>
+                                <div class="commitment-content">
+                                    <h4>Sono pronto/a a fare il massimo per trasformarmi</h4>
+                                    <p>Sono determinato/a a dare priorità al mio percorso di trasformazione e a fare tutti i cambiamenti necessari</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="submit-button" class="submit-button">INVIA IL QUESTIONARIO</button>
+                    <p class="privacy-note">I tuoi dati saranno trattati nel rispetto della privacy. Non verranno mai ceduti a terzi.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="../images/SECONDLIFE_colorYW.png" alt="SecondLife Project Logo" class="footer-logo-img">
+                    <p>Trasforma il tuo corpo e la tua mente</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Link Rapidi</h3>
+                    <ul>
+                        <li><a href="index.html#come-funziona">Come Funziona</a></li>
+                        <li><a href="index.html#benefici">Benefici</a></li>
+                        <li><a href="index.html#target">Per Chi</a></li>
+                        <li><a href="index.html#coaching">Coaching</a></li>
+                        <li><a href="index.html#contatti">Contatti</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>Seguici</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SecondLife Project. Tutti i diritti riservati.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script src="questionario.js"></script>
+</body>
+</html>

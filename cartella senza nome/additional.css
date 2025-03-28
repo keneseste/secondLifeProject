@@ -1,0 +1,17 @@
+.privacy-note {
+    font-size: 0.8rem;
+    color: #adb5bd;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.target-list li .fas.fa-check {
+    color: #00b7ff;
+    margin-right: 1rem;
+}
+
+@media (max-width: 576px) {
+    .form-intro ul.target-list {
+        padding-left: 1rem;
+    }
+}
