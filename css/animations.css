@@ -1,0 +1,289 @@
+/* Animazioni per Second Life Project */
+
+/* Animazione fade-in */
+.animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.animate.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animazioni per hero section */
+.hero-title {
+  animation: fadeInDown 1s ease-out;
+}
+
+.hero-subtitle {
+  animation: fadeInUp 1s ease-out 0.3s;
+  animation-fill-mode: both;
+}
+
+.hero-buttons {
+  animation: fadeInUp 1s ease-out 0.6s;
+  animation-fill-mode: both;
+}
+
+/* Animazioni per cards */
+.method-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.method-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.method-card-icon {
+  transition: all 0.3s ease;
+}
+
+.method-card:hover .method-card-icon {
+  background-color: var(--red-bright);
+}
+
+/* Animazioni per bottoni */
+.btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.btn:hover::after {
+  height: 100%;
+}
+
+/* Animazioni per form */
+.form-control {
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  transform: translateY(-3px);
+}
+
+.form-control.error {
+  border-color: #ff3860;
+  box-shadow: 0 0 0 2px rgba(255, 56, 96, 0.2);
+}
+
+/* Keyframes */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Stili aggiuntivi */
+.text-center {
+  text-align: center;
+}
+
+.mt-50 {
+  margin-top: 50px;
+}
+
+/* Header sticky */
+header.sticky {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  padding: 5px 0;
+}
+
+header.sticky .logo {
+  height: 50px;
+}
+
+/* Stile per il menu mobile */
+.mobile-menu-btn {
+  width: 30px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.mobile-menu-btn i {
+  font-size: 24px;
+  color: var(--dark-gray);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active i {
+  color: var(--orange-dark);
+}
+
+/* Miglioramenti per la sezione servizi */
+.service-box {
+  border-left: 5px solid var(--orange-light);
+}
+
+.service-price span {
+  font-size: 1rem;
+  color: var(--dark-gray);
+  font-weight: normal;
+}
+
+/* Miglioramenti per il form di contatto */
+.contact-form {
+  position: relative;
+}
+
+.contact-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, var(--orange-light), var(--red-bright));
+  border-radius: 5px 5px 0 0;
+}
+
+/* Miglioramenti per il footer */
+.footer-logo {
+  position: relative;
+}
+
+.footer-logo::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background-color: var(--orange-light);
+}
+
+/* Stile per citazioni */
+blockquote {
+  font-style: italic;
+  padding: 20px;
+  background-color: var(--light-gray);
+  border-left: 5px solid var(--orange-light);
+  margin: 20px 0;
+  position: relative;
+}
+
+blockquote::before {
+  content: '"';
+  font-size: 4rem;
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  color: var(--orange-light);
+  opacity: 0.2;
+}
+
+/* Stile per il manifesto */
+.manifesto {
+  background-color: var(--light-gray);
+  padding: 50px 0;
+  text-align: center;
+}
+
+.manifesto-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.manifesto-quote {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--red-dark);
+  margin-bottom: 30px;
+  line-height: 1.4;
+}
+
+/* Stile per la sezione valori */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.value-item {
+  text-align: center;
+  padding: 30px;
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.value-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.value-icon {
+  font-size: 2.5rem;
+  color: var(--orange-light);
+  margin-bottom: 20px;
+}
+
+.value-title {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: var(--red-dark);
+}
+
+/* Miglioramenti responsive */
+@media (max-width: 992px) {
+  .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .manifesto-quote {
+    font-size: 1.5rem;
+  }
+}
